@@ -1,0 +1,29 @@
+.outter_box{
+    height: 700px;
+    border: 1px solid ghostwhite;
+}
+.top_box{
+    width: 1000px;
+}
+.left_box{
+    float: left;
+    width: 500px;
+    border: 1px solid gray;
+    height: 80%;
+}
+.right_box{
+    float: left;
+    width: 500px;
+    border: 1px solid gray;
+    height: 80%;
+}
+.result_box{
+    float: left;
+     width: 1000px;
+     border: 1px solid gray;
+     height: 50px;
+ }
+.girlfriend_picture {
+    float: left;
+    width: 300px;
+}
