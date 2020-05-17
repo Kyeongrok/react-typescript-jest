@@ -1,37 +1,43 @@
 // @ts-ignore
 import React, {Component} from "react";
+import Election from "../domain/election";
+import '../css/election.css'
+import '../css/paging.css'
+import Paging from "./paging";
 
-type Statistics = {
-  rows:Array<Object>
-}
-
-const TrRow = (props:{row:Object}) => {
+const TrRow = (props:{row:Election}) => {
   const row = props.row;
   console.log('=>', row)
   return(
     <tr>
-      <td>{"1st column"}</td>
-      <td></td>
-      <td></td>
+      <td>{row['지역명']}</td>
+      <td>{row['선거구_시도명']}</td>
+      <td>{row['선거인수']}</td>
+      <td>{row['읍면동명']}</td>
+      <td>{row['투표구명']}</td>
+      <td>{row['투표수']}</td>
     </tr>
   )
 }
 
 // props에 무엇이 들어올지 모른다는 risk가 있다.
-const Statistics = (props:Statistics) => {
-  console.log(props.rows);
+const Statistics = (props:{rows:Array<Election>}) => {
+  console.log("statistics=>", props.rows)
   return (
     <div className={'outter_box'}>
       <table>
         <tbody>
           <tr>
-            <th>1st</th>
-            <th>2nd</th>
-            <th>3rd</th>
+            <th>지역명</th>
+            <th>선거구_시도명</th>
+            <th>선거인수</th>
+            <th>읍면동명</th>
+            <th>투표구명</th>
+            <th>투표수</th>
           </tr>
-          {
-            props.rows.map((row, idx) => <TrRow key={idx} row={row}></TrRow>)
-          }
+          {props.rows.map((row, idx) => {
+            return <TrRow key={idx} row={row}></TrRow>
+          })}
         </tbody>
       </table>
     </div>
