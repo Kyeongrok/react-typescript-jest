@@ -7,7 +7,6 @@ import Paging from "./paging";
 
 const TrRow = (props:{row:Election}) => {
   const row = props.row;
-  console.log('=>', row)
   return(
     <tr>
       <td>{row['지역명']}</td>
@@ -22,7 +21,6 @@ const TrRow = (props:{row:Election}) => {
 
 // props에 무엇이 들어올지 모른다는 risk가 있다.
 const Statistics = (props:{rows:Array<Election>}) => {
-  console.log("statistics=>", props.rows)
   return (
     <div className={'outter_box'}>
       <table>

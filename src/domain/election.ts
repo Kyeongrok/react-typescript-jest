@@ -8,7 +8,6 @@ export class Election {
   투표수: number
 
   constructor(response:any) {
-    console.log(response);
     this.선거구_시도명 = response['선거구_시도명']
     this.투표_지역구id = response['투표_지역구id']
     this.투표구명 = response['투표구명']
