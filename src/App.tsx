@@ -1,72 +1,57 @@
-import React, {Component} from 'react';
+import React, {Component, FC, useEffect, useState} from 'react';
 import './css/App.css';
 import axios from 'axios'
 import Statistics from './component/statistics'
 import Election from "./domain/election";
 import Paging from "./component/paging";
+import pagingFromTo from "./lib/paging";
 
-class App extends Component{
-  state = {
-    data:[],
-    from:0,
-    to:2,
-    recentPage:1,
-    pagingTotalCount:0,
-    rowsPerPage:15,
-  }
-  apiCall = ():void => {
-    const from = this.state.from;
-    const to = from + this.state.rowsPerPage;
-    axios.get(`https://jxkjd9ecxh.execute-api.ap-northeast-2.amazonaws.com/dev/v1/find/election21/full?from=${from}&to=${to}`)
-      .then((res) => {
-        const data = res.data.map((v:any, k:number) => new Election(v))
-        this.setState({data:data, pagingTotalCount:data.length})
-      })
-  }
-  componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<{}>, snapshot?: any): void {
-
-  }
-
-  componentDidMount(): void {
-    const from = this.state.from;
-    const to = from + this.state.rowsPerPage;
-    axios.get(`https://jxkjd9ecxh.execute-api.ap-northeast-2.amazonaws.com/dev/v1/find/election21/full?from=${from}&to=${to}`)
+const App:FC = () =>{
+  const apiCall = (recentPage:number, rowsPerPage:number) => {
+    const ft = pagingFromTo(recentPage, rowsPerPage);
+    const from = ft[0];
+    const to = ft[1];
+    axios(`https://jxkjd9ecxh.execute-api.ap-northeast-2.amazonaws.com/dev/v1/find/election21/full?from=${from}&to=${to}`)
       .then((res) => {
         const data = res.data.data.map((v:any, k:number) => new Election(v))
-        const total = res.data.total;
-        this.setState({
-          data:data,
-          pagingTotalCount:total
-        })
-      })
+        setData(data)
+        setPagingTotalCount(res.data.paging.total)
+      });
+
   }
 
-  handleChangeRecords = (e:any): void =>   {
-    this.setState({rowsPerPage:e.target.value})
+  const handleChangePage = (pageNo:number): void => {
+    console.log("------", pageNo);
+    setRecentpage(pageNo);
   }
 
-  handleChangePage = (pageNo:number): void => {
-    console.log("handleChangePage=>", pageNo);
-    // this.setState({recentPage: pageNo});
+  const [data, setData] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [pagingTotalCount, setPagingTotalCount] = useState(0);
+  const [recentPage, setRecentpage] = useState(1);
+  const handleChangeResPerPage = (e:any) => {
+    return setRowsPerPage(parseInt(e.target.value));
   }
 
-  render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
-    return (
-        <div className="App">
-          <header className="App-header">
-            <p>Election 21</p>
-            number of records = {this.state.data.length}
-            <select onChange={this.handleChangeRecords.bind(this)}>
-              <option value="15">15</option>
-              <option value="30">30</option>
-              <option value="45">45</option>
-            </select>
-            <Statistics rows={this.state.data} />
-            <Paging handleChangePage={this.handleChangePage} count={this.state.pagingTotalCount} rowPerPage={this.state.rowsPerPage}/>
-          </header>
-        </div>
-    );
-  }
+  useEffect(() => {
+    apiCall(recentPage, rowsPerPage);
+  }, [rowsPerPage, recentPage]);
+
+
+  return (
+      <div className="App">
+        <header className="App-header">
+          <p>제 21대 국회의원 선거 데이터 조회</p>
+          <select onChange={(e)=>handleChangeResPerPage(e)}>
+            <option value="15">15개씩 보기</option>
+            <option value="30">30개씩 보기</option>
+            <option value="45">45개씩 보기</option>
+          </select>
+          <Statistics rows={data} />
+          <Paging numberOfPages={ Math.floor(pagingTotalCount / rowsPerPage)} recentPage={recentPage} handleChangePage={handleChangePage} />
+        </header>
+      </div>
+  );
 }
 
 export default App;

@@ -1,14 +1,14 @@
 // @ts-ignore
 import React, {Component} from "react";
 import Election from "../domain/election";
-import '../css/election.css'
+import '../css/statistics.css'
 import '../css/paging.css'
-import Paging from "./paging";
 
 const TrRow = (props:{row:Election}) => {
   const row = props.row;
   return(
     <tr>
+      <td>{row['투표_지역구id']}</td>
       <td>{row['지역명']}</td>
       <td>{row['선거구_시도명']}</td>
       <td>{row['선거인수']}</td>
@@ -22,10 +22,10 @@ const TrRow = (props:{row:Election}) => {
 // props에 무엇이 들어올지 모른다는 risk가 있다.
 const Statistics = (props:{rows:Array<Election>}) => {
   return (
-    <div className={'outter_box'}>
-      <table>
+      <table className={'statistics_table'}>
         <tbody>
           <tr>
+            <th>투표_지역구id</th>
             <th>지역명</th>
             <th>선거구_시도명</th>
             <th>선거인수</th>
@@ -38,7 +38,6 @@ const Statistics = (props:{rows:Array<Election>}) => {
           })}
         </tbody>
       </table>
-    </div>
   )
 }
 

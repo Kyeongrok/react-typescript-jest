@@ -1,8 +1,21 @@
 ul {
     list-style-type:none;
-    border: 1px solid gray;
+    /*border: 1px solid gray;*/
 }
 
 li {
     float: left;
+    border: 1px solid lavender;
+    cursor: pointer;
+    margin: 5px;
+    padding: 2px;
+}
+
+.before {
+    float: left;
+    cursor: pointer;
+}
+.next {
+    float: left;
+    cursor: pointer;
 }
